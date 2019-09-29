@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
 
 export class ListItemCard extends Component {
+
+    goToItemScreen = () => {
+        console.log("This works");
+    }
+
     render() {
         return (
-            <div className='list_item_card'>
+            <div className='list_item_card' onClick = {this.goToItemScreen}>
                 <div className='list_item_card_description'>
                     {this.props.listItem.description}
                 </div>

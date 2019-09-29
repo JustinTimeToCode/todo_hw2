@@ -4,6 +4,9 @@ import HomeScreen from './components/home_screen/HomeScreen'
 import ItemScreen from './components/item_screen/ItemScreen'
 import ListScreen from './components/list_screen/ListScreen'
 
+import './css/todo_layout.css'
+import './css/todo_style.css'
+
 const AppScreen = {
   HOME_SCREEN: "HOME_SCREEN",
   LIST_SCREEN: "LIST_SCREEN",
