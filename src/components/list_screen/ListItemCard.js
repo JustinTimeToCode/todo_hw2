@@ -6,20 +6,47 @@ export class ListItemCard extends Component {
         console.log("This works");
     }
 
+    moveItemUp = (e) =>{
+        e.stopPropagation();
+        console.log('You clicked the move item up button');
+        if(this.props.key !== 0){
+            
+        }
+    }
+
+    moveItemDown = (e) =>{
+        e.stopPropagation();
+        console.log('You clicked the move item down button');
+    }
+
+    deleteItem = (e) =>{
+        e.stopPropagation();
+        console.log('You clicked the delete item button');
+    }
+
+    disableButton = (key, ) =>{
+
+    }
+
     render() {
         return (
-            <div className='list_item_card' onClick = {this.goToItemScreen}>
+            <div className='list_item_card' onClick = {this.props.loadListItem.bind(this, this.props.listItem)}>
                 <div className='list_item_card_description'>
                     {this.props.listItem.description}
                 </div>
                 <div className='list_item_card_assigned_to'>
-                    Assigned To: <strong>{this.props.listItem.assignedTo}</strong>
+                    Assigned To: <strong>{this.props.listItem.assigned_to}</strong>
                 </div>
                 <div className='list_item_card_due_date'>
-                    {this.props.listItem.dueDate}
+                    {this.props.listItem.due_date}
                 </div>
-                <div className='list_item_card_completed'>
-                    {this.props.listItem.completed}
+                <div className={ this.props.listItem.completed ? 'list_item_card_completed' : 'list_item_card_not_completed'}>
+                    {this.props.listItem.completed ? 'Completed' : 'Pending'}
+                </div>
+                <div className = 'list_item_card_toolbar'>
+                    <button onClick = {this.moveItemUp} className='list_item_card_button'>&#8679;</button>
+                    <button onClick = {this.moveItemDown} className='list_item_card_button'>&#8681;</button>
+                    <button onClick = {this.deleteItem} className='list_item_card_button'>&#10005;</button>
                 </div>
             </div>
         )
