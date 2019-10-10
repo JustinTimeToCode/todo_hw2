@@ -48,6 +48,27 @@ class App extends Component {
     // }
   }
 
+  prependList = (listToPrepend) => {
+    this.state.todoLists.unshift(listToPrepend);
+    // this.view.loadListLinks(this.todoLists);
+  }
+
+  moveListToTop = (listToMove) => {
+    // REMOVE THE LIST IF IT EXISTS
+    this.removeList(listToMove);
+
+    // AND THEN ADD IT TO THE TOP OF THE STACK
+    this.prependList(listToMove);
+  }
+
+  removeList = (listToRemove) => {
+    // REMOVE IT IF IT EXISTS
+    let indexOfList = this.todoLists.indexOf(listToRemove);
+    if (indexOfList >= 0)
+        this.todoLists.splice(indexOfList, 1);
+    this.view.loadListLinks(this.todoLists);
+}
+
   loadList = (todoListToLoad) => {
     this.setState({currentScreen: AppScreen.LIST_SCREEN});
     this.setState({currentList: todoListToLoad});
