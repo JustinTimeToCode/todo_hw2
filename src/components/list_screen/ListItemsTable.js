@@ -7,8 +7,18 @@ export class ListItemsTable extends Component {
         super(props);
 
         this.state = {
-            listToEdit: props.todoList
+            listToEdit: props.todoList //TodoList Object (access the items for array)
         }
+    }
+
+    disableButtons = () =>{
+        if(this.props.key === 0){
+            
+        }
+    }
+
+    componentDidMount(){
+        
     }
 
     render() {
@@ -25,7 +35,8 @@ export class ListItemsTable extends Component {
                             key={todoItem.key}
                             todoList={this.props.todoList}
                             listItem={todoItem}
-                            loadListItem={this.props.loadListItem.bind(this, todoItem)} />
+                            loadListItem={this.props.loadListItem.bind(this, todoItem)}
+                            disableButton={this.disableButtons} />
                     ))
                 }
                 <div onClick = {this.props.goListItem} className = 'list_item_add_card'>

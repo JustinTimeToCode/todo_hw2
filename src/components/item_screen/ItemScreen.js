@@ -6,7 +6,7 @@ export class ItemScreen extends Component {
     constructor(props){
         super(props);
 
-        this.state ={
+        this.state = {
             listToEdit: props.todoList,
             itemToEdit: props.todoItem
         }
@@ -32,14 +32,21 @@ export class ItemScreen extends Component {
     }
 
     submitItemChanges(){
+
+        console.log(this.state.itemToEdit);
+
         if (this.state.itemToEdit != null) {
+            
             this.setState({ itemToEdit: {
                 key: this.state.itemToEdit.key,
                 description: this.descriptionInput.current.value,
                 due_date: this.dueDatePicker.current.value,
                 assigned_to: this.assignedToInput.current.value,
                 completed: this.completedCheckbox.current.value
-            }})
+            }}, () => {
+                this.props.loadList(this.state.listToEdit)
+            })
+
         } else {
             this.state.listToEdit.items.push({
                 key: this.state.listToEdit.length,
@@ -56,7 +63,7 @@ export class ItemScreen extends Component {
         return (
             <div id="todo_item">
                 <strong> Item </strong>
-                <form id="item_form_container">
+                <div id="item_form_container">
                     <strong id="item_description_prompt" className="item_prompt">Description:</strong>
                     <input ref={this.descriptionInput} type="text" id="item_description_textfield" className="item_input"/>
                     <strong id="item_assigned_to_prompt" className="item_prompt">Assigned To:</strong>
@@ -65,7 +72,7 @@ export class ItemScreen extends Component {
                     <input ref={this.dueDatePicker} type="date" id="item_date_picker" className="item_input"/>
                     <strong id="item_completed_prompt" className="item_prompt">Completed:</strong>
                     <input ref={this.completedCheckbox} type="checkbox" id="item_completed_checkbox" className="item_input"/>
-                </form>
+                </div>
                 <input onClick={this.submitItemChanges.bind(this)} className="item_form_button" type="submit"/>
                 <input 
                 className="item_form_button" 

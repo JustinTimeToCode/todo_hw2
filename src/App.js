@@ -25,7 +25,6 @@ class App extends Component {
     }
 
   }
-  
 
   goHome = () => {
     this.setState({currentScreen: AppScreen.HOME_SCREEN});
@@ -102,7 +101,8 @@ class App extends Component {
           todoList={this.state.currentList}
           todoItem={this.state.currentItem}
           currentScreen={this.state.currentScreen}
-          goList={this.goList.bind(this)}/>;
+          goList={this.goList.bind(this)}
+          loadList={this.loadList.bind(this)}/>;
       default:
         return <div>ERROR</div>;
     }
