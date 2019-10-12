@@ -3,13 +3,14 @@ import ListItemCard from './ListItemCard'
 
 export class ListItemsTable extends Component {
     
-    constructor(props){
-        super(props);
+    // constructor(props){
+    //     super(props);
 
-        this.state = {
-            listToEdit: props.todoList //TodoList Object (access the items for array)
-        }
-    }
+    //     this.state = {
+    //         listToEdit: props.todoList //TodoList Object (access the items for array)
+    //     }
+    // }
+
 
     disableButtons = () =>{
         if(this.props.key === 0){
@@ -31,12 +32,16 @@ export class ListItemsTable extends Component {
                 </div>    
                 {
                     this.props.todoList.items.map((todoItem)=>( //todoListItem (Object)
+
                         <ListItemCard 
                             key={todoItem.key}
                             todoList={this.props.todoList}
                             listItem={todoItem}
                             loadListItem={this.props.loadListItem.bind(this, todoItem)}
-                            disableButton={this.disableButtons} />
+                            disableButton={this.disableButtons}
+                            moveItemUp={this.props.moveItemUp}
+                            moveItemDown={this.props.moveItemDown}
+                            deleteItem={this.props.deleteItem} />
                     ))
                 }
                 <div onClick = {this.props.goListItem} className = 'list_item_add_card'>

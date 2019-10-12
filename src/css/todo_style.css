@@ -198,6 +198,7 @@ font-size: 16pt;
 .modal.is_visible {
   visibility: visible;
   opacity: 1;
+  z-index: 1;
 }
 
 .modal_dialog {

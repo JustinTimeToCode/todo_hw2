@@ -2,31 +2,13 @@ import React, { Component } from 'react'
 
 export class ListItemCard extends Component {
 
-    goToItemScreen = () => {
-        console.log("This works");
-    }
+    // constructor(props){
+    //     super(props);
 
-    moveItemUp = (e) =>{
-        e.stopPropagation();
-        console.log('You clicked the move item up button');
-        if(this.props.key !== 0){
-            
-        }
-    }
-
-    moveItemDown = (e) =>{
-        e.stopPropagation();
-        console.log('You clicked the move item down button');
-    }
-
-    deleteItem = (e) =>{
-        e.stopPropagation();
-        console.log('You clicked the delete item button');
-    }
-
-    disableButton = (key, ) =>{
-
-    }
+    //     this.state = {
+    //         todoList: this.props.todoList
+    //     }
+    // }
 
     render() {
         return (
@@ -44,9 +26,9 @@ export class ListItemCard extends Component {
                     {this.props.listItem.completed ? 'Completed' : 'Pending'}
                 </div>
                 <div className = 'list_item_card_toolbar'>
-                    <button onClick = {this.moveItemUp} className='list_item_card_button'>&#8679;</button>
-                    <button onClick = {this.moveItemDown} className='list_item_card_button'>&#8681;</button>
-                    <button onClick = {this.deleteItem} className='list_item_card_button'>&#10005;</button>
+                    <button onClick = {this.props.moveItemUp.bind(this)} className='list_item_card_button'>&#8679;</button>
+                    <button onClick = {this.props.moveItemDown.bind(this)} className='list_item_card_button'>&#8681;</button>
+                    <button onClick = {this.props.deleteItem.bind(this)} className='list_item_card_button'>&#10005;</button>
                 </div>
             </div>
         )

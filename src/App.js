@@ -42,12 +42,6 @@ class App extends Component {
     this.setState({currentScreen: AppScreen.ITEM_SCREEN});
   }
 
-  deleteList = () => {
-    // if(this.state.currentList != null){
-      console.log(`This is the current list: ${this.state.currentList}`);
-    // }
-  }
-
   prependList = (listToPrepend) => {
     this.state.todoLists.unshift(listToPrepend);
     // this.view.loadListLinks(this.todoLists);
@@ -61,12 +55,15 @@ class App extends Component {
     this.prependList(listToMove);
   }
 
-  removeList = (listToRemove) => {
+  removeList = (/*listToRemove*/) => {
     // REMOVE IT IF IT EXISTS
-    let indexOfList = this.todoLists.indexOf(listToRemove);
+    let indexOfList = this.state.todoLists.indexOf(this.state.currentList);
+    let todoLists = this.state.todoLists;
     if (indexOfList >= 0)
-        this.todoLists.splice(indexOfList, 1);
-    this.view.loadListLinks(this.todoLists);
+        todoLists.splice(indexOfList, 1);
+    this.setState({todoLists})
+    // this.view.loadListLinks(this.todoLists);
+    this.goHome();
 }
 
   loadList = (todoListToLoad) => {
@@ -113,10 +110,11 @@ class App extends Component {
         return <ListScreen
           goHome={this.goHome.bind(this)}
           goList={this.goList.bind(this)}
+          loadList={this.loadList}
           loadListItem={this.loadListItem.bind(this)}
           goListItem={this.goListItem.bind(this)}
           todoList={this.state.currentList}
-          deleteList={this.deleteList.bind(this)}/>;
+          removeList={this.removeList}/>;
       case AppScreen.ITEM_SCREEN:
         return <ItemScreen 
           todoList={this.state.currentList}

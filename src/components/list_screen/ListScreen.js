@@ -2,27 +2,8 @@ import React, { Component } from 'react'
 import ListHeading from './ListHeading'
 import ListItemsTable from './ListItemsTable'
 import ListTrash from './ListTrash'
+import Modal from './Modal'
 import PropTypes from 'prop-types';
-
-const Modal = (props) =>{
-    return (
-      <div class="modal" id="modal_yes_no_dialog" data-animation="slideInOutLeft">
-          <div class="modal_dialog">
-              <header class="dialog_header">
-                  Delete list?
-              </header>
-              <section class="dialog_content">
-                  <p><strong>Are you sure you want to delete this list?</strong></p>
-              </section>
-                  <button id="dialog_yes_button">Yes</button>
-                  <button id="dialog_no_button" >No</button>
-              <footer class="dialog_footer">
-                  The list will not be retrievable.
-              </footer>
-          </div>
-      </div>
-    )
-  }
 
 export class ListScreen extends Component {
 
@@ -31,13 +12,13 @@ export class ListScreen extends Component {
 
         this.state = {
             listToEdit: this.props.todoList,
-            displayModal: false
         }
 
         console.log(this.state);
 
         this.nameInput = React.createRef();
         this.ownerInput =  React.createRef();
+        this.modalRef = React.createRef();
     }
 
     updateListName(todoList){
@@ -60,8 +41,47 @@ export class ListScreen extends Component {
         }
     }
 
-    handleNameChange(){
+    moveItemUp = (e) =>{
+        e.stopPropagation();
+        let index = this.state.listToEdit.items.indexOf(this.state.listItem);
+        let listToEdit = this.state.listToEdit;
+        if (index !== 0) {
+            [listToEdit.items[index], listToEdit.items[index - 1]] = 
+            [listToEdit.items[index - 1], listToEdit.items[index]]   
+        }
+        this.props.loadList(this.state.listToEdit);
+        this.forceUpdate();
+        console.log('You clicked the move item up button');
+        console.log(index);
+    }
 
+    moveItemDown = (e) =>{
+        e.stopPropagation();
+        let index = this.state.listToEdit.items.indexOf(this.state.listItem);
+        let listToEdit = this.state.listToEdit;
+        if (index !== this.state.listToEdit.items.length - 1) {
+            [listToEdit.items[index], listToEdit.items[index + 1]] = 
+            [listToEdit.items[index + 1], listToEdit.items[index]]
+        }
+        this.props.loadList(this.state.listToEdit);
+        this.forceUpdate();
+        console.log('You clicked the move item down button');
+        console.log(index);
+    }
+
+    deleteItem = (e) =>{
+        e.stopPropagation();
+        let index = this.state.listToEdit.items.indexOf(this.props.listItem);
+        console.log('You clicked the delete item button');
+        console.log(index);
+    }
+
+    hideModal = () => {
+        this.modalRef.current.classList.remove('is_visible');
+    }
+
+    showModal = () => {
+        this.modalRef.current.classList.add("is_visible");
     }
 
     getListName() {
@@ -83,9 +103,14 @@ export class ListScreen extends Component {
         return (
             <div id="todo_list">
                 <ListHeading goHome={this.props.goHome} />
-                <ListTrash 
-                deleteList={this.props.deleteList}
+                <ListTrash
+                showModal={this.showModal} 
+                removeList={this.props.removeList}
                 todoList={this.props.todoList}/>
+                <Modal 
+                    modalRef={this.modalRef} 
+                    removeList={this.props.removeList}
+                    hideModal={this.hideModal}/>
                 <div id="list_details_container">
                     <div id="list_details_name_container" className="text_toolbar">
                         <span id="list_name_prompt">Name:</span>
@@ -107,9 +132,12 @@ export class ListScreen extends Component {
                     </div>
                 </div>
                 <ListItemsTable 
-                todoList={this.props.todoList}
-                loadListItem={this.props.loadListItem}
-                goListItem={this.props.goListItem} />
+                    todoList={this.props.todoList}
+                    loadListItem={this.props.loadListItem}
+                    goListItem={this.props.goListItem}
+                    moveItemUp={this.moveItemUp}
+                    moveItemDown={this.moveItemDown}
+                    deleteItem={this.deleteItem} />
             </div>
         )
     }
