@@ -3,14 +3,46 @@ import ListItemCard from './ListItemCard'
 
 export class ListItemsTable extends Component {
     
-    // constructor(props){
-    //     super(props);
+    constructor(props){
+        super(props);
 
-    //     this.state = {
-    //         listToEdit: props.todoList //TodoList Object (access the items for array)
-    //     }
-    // }
+        this.state = {
+            listItems: props.todoList.items //TodoList Object (access the items for array)
+        }
+    }
 
+    moveItemUp = (e, todoItem) =>{
+        e.stopPropagation();
+        let index = this.state.listItems.indexOf(todoItem);
+        let listItems = this.state.listItems;
+        if (index !== 0) {
+            [listItems[index], listItems[index - 1]] = 
+            [listItems[index - 1], listItems[index]]   
+        }
+        this.setState({listItems});
+        console.log('You clicked the move item up button');
+        console.log(index);
+    }
+
+    moveItemDown = (e, todoItem) =>{
+        e.stopPropagation();
+        let index = this.state.listItems.indexOf(todoItem);
+        let listItems = this.state.listItems;
+        if (index !== this.state.listItems.length - 1) {
+            [listItems[index], listItems[index + 1]] = 
+            [listItems[index + 1], listItems[index]]
+        }
+        this.setState({listItems});
+        console.log('You clicked the move item down button');
+        console.log(index);
+    }
+
+    deleteItem = (e) =>{
+        e.stopPropagation();
+        let index = this.state.listItems.items.indexOf(this.props.listItem);
+        console.log('You clicked the delete item button');
+        console.log(index);
+    }
 
     disableButtons = () =>{
         if(this.props.key === 0){
@@ -31,7 +63,7 @@ export class ListItemsTable extends Component {
                     <div className="list_item_status_header">Status</div>
                 </div>    
                 {
-                    this.props.todoList.items.map((todoItem)=>( //todoListItem (Object)
+                    this.state.listItems.map((todoItem)=>( //todoListItem (Object)
 
                         <ListItemCard 
                             key={todoItem.key}
@@ -39,9 +71,9 @@ export class ListItemsTable extends Component {
                             listItem={todoItem}
                             loadListItem={this.props.loadListItem.bind(this, todoItem)}
                             disableButton={this.disableButtons}
-                            moveItemUp={this.props.moveItemUp}
-                            moveItemDown={this.props.moveItemDown}
-                            deleteItem={this.props.deleteItem} />
+                            moveItemUp={this.moveItemUp}
+                            moveItemDown={this.moveItemDown}
+                            deleteItem={this.deleteItem} />
                     ))
                 }
                 <div onClick = {this.props.goListItem} className = 'list_item_add_card'>

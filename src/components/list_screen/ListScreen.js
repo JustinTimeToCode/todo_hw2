@@ -41,40 +41,7 @@ export class ListScreen extends Component {
         }
     }
 
-    moveItemUp = (e) =>{
-        e.stopPropagation();
-        let index = this.state.listToEdit.items.indexOf(this.state.listItem);
-        let listToEdit = this.state.listToEdit;
-        if (index !== 0) {
-            [listToEdit.items[index], listToEdit.items[index - 1]] = 
-            [listToEdit.items[index - 1], listToEdit.items[index]]   
-        }
-        this.props.loadList(this.state.listToEdit);
-        this.forceUpdate();
-        console.log('You clicked the move item up button');
-        console.log(index);
-    }
 
-    moveItemDown = (e) =>{
-        e.stopPropagation();
-        let index = this.state.listToEdit.items.indexOf(this.state.listItem);
-        let listToEdit = this.state.listToEdit;
-        if (index !== this.state.listToEdit.items.length - 1) {
-            [listToEdit.items[index], listToEdit.items[index + 1]] = 
-            [listToEdit.items[index + 1], listToEdit.items[index]]
-        }
-        this.props.loadList(this.state.listToEdit);
-        this.forceUpdate();
-        console.log('You clicked the move item down button');
-        console.log(index);
-    }
-
-    deleteItem = (e) =>{
-        e.stopPropagation();
-        let index = this.state.listToEdit.items.indexOf(this.props.listItem);
-        console.log('You clicked the delete item button');
-        console.log(index);
-    }
 
     hideModal = () => {
         this.modalRef.current.classList.remove('is_visible');
