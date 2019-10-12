@@ -37,9 +37,12 @@ export class ListItemsTable extends Component {
         console.log(index);
     }
 
-    deleteItem = (e) =>{
+    deleteItem = (e, todoItem) =>{
         e.stopPropagation();
-        let index = this.state.listItems.items.indexOf(this.props.listItem);
+        let index = this.state.listItems.indexOf(todoItem);
+        let listItems = this.state.listItems;
+        listItems.splice(index, 1);
+        this.setState({listItems});
         console.log('You clicked the delete item button');
         console.log(index);
     }
