@@ -2,14 +2,6 @@ import React, { Component } from 'react'
 
 export class ListItemCard extends Component {
 
-    // constructor(props){
-    //     super(props);
-
-    //     this.state = {
-    //         todoList: this.props.todoList
-    //     }
-    // }
-
     render() {
         return (
             <div className='list_item_card' onClick = {this.props.loadListItem.bind(this, this.props.listItem)}>

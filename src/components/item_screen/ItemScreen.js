@@ -8,7 +8,8 @@ export class ItemScreen extends Component {
 
         this.state = {
             listToEdit: props.todoList,
-            itemToEdit: props.todoItem
+            itemToEdit: props.todoItem,
+            jsTPS: props.jsTPS
         }
 
         this.descriptionInput = React.createRef();

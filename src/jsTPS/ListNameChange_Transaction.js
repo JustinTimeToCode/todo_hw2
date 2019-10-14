@@ -1,6 +1,6 @@
-import jsTPS_Transaction from '../jsTPS_Transaction';
+import jsTPS_Transaction from './jsTPS_Transaction';
 
-class ListNameChange_Transaction extends jsTPS_Transaction{
+export default class ListNameChange_Transaction extends jsTPS_Transaction{
     constructor(oldListName, newListName){
         super();
 

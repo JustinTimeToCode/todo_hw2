@@ -1,6 +1,6 @@
-import jsTPS_Transaction from '../jsTPS_Transaction';
+import jsTPS_Transaction from './jsTPS_Transaction';
 
-class OwnerNameChange_Transaction extends jsTPS_Transaction{
+export default class OwnerNameChange_Transaction extends jsTPS_Transaction{
     constructor(oldOwnerName, newOwnerName){
         super();
 

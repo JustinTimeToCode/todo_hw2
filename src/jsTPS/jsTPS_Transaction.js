@@ -11,14 +11,14 @@
  * @author THE McKilla Gorilla (accept no imposters)
  * @version 2.0
  */
-class jsTPS_Transaction{
+export default class jsTPS_Transaction {
     /**
      * This method is called by jsTPS when a transaction is executed.
      */
-    doTransaction();
-    
+    doTransaction() {}
+
     /**
      * This method is called by jsTPS when a transaction is undone.
      */
-    undoTransaction();
+    undoTransaction() {}
 }
