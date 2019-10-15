@@ -34,30 +34,36 @@ export class ItemScreen extends Component {
 
     submitItemChanges(){
 
+        let listToEdit = this.state.listToEdit;
         console.log(this.state.itemToEdit);
 
         if (this.state.itemToEdit != null) {
             
+            let index = this.state.listToEdit.items.indexOf(this.state.itemToEdit);
+
             this.setState({ itemToEdit: {
                 key: this.state.itemToEdit.key,
                 description: this.descriptionInput.current.value,
                 due_date: this.dueDatePicker.current.value,
                 assigned_to: this.assignedToInput.current.value,
-                completed: this.completedCheckbox.current.value
+                completed: this.completedCheckbox.current.checked
             }}, () => {
-                this.props.loadList(this.state.listToEdit)
+                listToEdit.items[index] = this.state.itemToEdit;
+                this.setState({listToEdit})
+                this.props.loadList(this.state.listToEdit);
             })
 
         } else {
-            this.state.listToEdit.items.push({
+            listToEdit.items.push({
                 key: this.state.listToEdit.length,
                 description: this.descriptionInput.current.value,
                 due_date: this.dueDatePicker.current.value,
                 assigned_to: this.assignedToInput.current.value,
                 completed: this.completedCheckbox.current.value
             })
+            this.setState({listToEdit});
         }
-        this.props.goList();
+        this.props.loadList(this.state.listToEdit);
     }
 
     render() {

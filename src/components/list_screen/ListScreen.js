@@ -6,6 +6,8 @@ import Modal from './Modal'
 import PropTypes from 'prop-types';
 import ListNameChange_Transaction from '../../jsTPS/ListNameChange_Transaction'
 import OwnerNameChange_Transaction from '../../jsTPS/OwnerNameChange_Transaction'
+import ItemOrderChange_Transaction from '../../jsTPS/ItemOrderChange_Transaction'
+import ItemRemoval_Transaction from '../../jsTPS/ItemRemoval_Transaction'
 import Mousetrap from 'mousetrap'
 
 export class ListScreen extends Component {
@@ -15,7 +17,6 @@ export class ListScreen extends Component {
 
         this.state = {
             listToEdit: this.props.todoList,
-            jsTPS: props.jsTPS
         }
 
         console.log(this.state);
@@ -26,8 +27,8 @@ export class ListScreen extends Component {
     }
 
     componentDidMount(){
-        Mousetrap.bind(['ctrl+z','command+z'], this.handleUndo);
-        Mousetrap.bind(['ctrl+y','command+y'], this.handleRedo)
+        Mousetrap.bind(['ctrl+z','command+z'], this.props.handleUndo);
+        Mousetrap.bind(['ctrl+y','command+y'], this.props.handleRedo);
     }
 
     componentWillUnmount(){
@@ -35,47 +36,76 @@ export class ListScreen extends Component {
         Mousetrap.unbind(['ctrl+y','command+y']);
     }
 
-    handleUndo = () =>{
-        let jsTPS = this.state.jsTPS;
-        jsTPS.undoTransaction();
-        this.setState({jsTPS});
-    }
-
-    handleRedo = () =>{
-        let jsTPS = this.state.jsTPS;
-        jsTPS.doTransaction();
-        this.setState({jsTPS})
-    }
 
     updateListName(todoList){
          // WE'RE GOING TO CHANGE THE NAME TOO BUT ONLY UPDATE
         // THE LIST OF LIST LINKS IF IT'S CHANGED
         let listToEdit = todoList;
-        let jsTPS = this.state.jsTPS;
         
         if (listToEdit.name !== this.nameInput.current.value) {
-            let nameTransaction = new ListNameChange_Transaction(listToEdit.name, this.nameInput.current.value);
-            jsTPS.addTransaction(nameTransaction);
+            
             listToEdit.name = this.nameInput.current.value;
             this.setState({listToEdit})
-            this.setState({jsTPS})
         }
+        let nameChangeTransaction = new ListNameChange_Transaction(listToEdit.name, this.nameInput.current.value)
+            this.props.updateJsTPS(nameChangeTransaction);
     }
 
     updateListOwner(todoList){
         let listToEdit = todoList;
-        let jsTPS = this.state.jsTPS;
 
         if (listToEdit.owner !== this.ownerInput.current.value) {
-            let ownerTransaction = new OwnerNameChange_Transaction(listToEdit.owner, this.ownerInput.current.value);
-            jsTPS.addTransaction(ownerTransaction);
-            listToEdit.owner = this.ownerInput.current.value;
-            this.setState({listToEdit})
-            this.setState({jsTPS})
+            
+            listToEdit.owner = this.ownerInput.current.value    
+            this.setState({listToEdit});
+        }
+        let ownerTransaction = new OwnerNameChange_Transaction(listToEdit.owner, this.ownerInput.current.value);
+        this.props.updateJsTPS(ownerTransaction);
+    }
+
+    moveItemUp = (e, todoItem) =>{
+        e.stopPropagation();
+        let index = this.state.listToEdit.items.indexOf(todoItem);
+        let listToEdit = this.state.listToEdit;
+        
+        if (index !== 0) {
+            // [listItems[index], listItems[index - 1]] = 
+            // [listItems[index - 1], listItems[index]];
+            
+            this.props.updateJsTPS(new ItemOrderChange_Transaction(listToEdit, 
+                listToEdit.items[index],
+                listToEdit.items[index - 1]));
+            this.setState({listToEdit}); 
         }
     }
 
+    moveItemDown = (e, todoItem) =>{
+        e.stopPropagation();
+        let index = this.state.listToEdit.items.indexOf(todoItem);
+        let listToEdit = this.state.listToEdit;
 
+        if (index !== this.state.listToEdit.items.length - 1) {
+            // [listItems[index], listItems[index + 1]] = 
+            // [listItems[index + 1], listItems[index]]
+
+            this.props.updateJsTPS(new ItemOrderChange_Transaction(listToEdit,
+                 listToEdit.items[index],
+                 listToEdit.items[index + 1]));
+            this.setState({listToEdit});
+        }
+        
+    }
+
+    deleteItem = (e, todoItem) =>{
+        e.stopPropagation();
+        let listToEdit = this.state.listToEdit;
+
+        this.props.updateJsTPS(new ItemRemoval_Transaction(listToEdit, todoItem));
+        // let index = this.state.listItems.indexOf(todoItem);
+        // let listItems = this.state.listItems;
+        // listItems.splice(index, 1);
+        this.setState({listToEdit});
+    }
 
     hideModal = () => {
         this.modalRef.current.classList.remove('is_visible');
@@ -133,13 +163,14 @@ export class ListScreen extends Component {
                     </div>
                 </div>
                 <ListItemsTable
-                    jsTPS={this.props.jsTPS} 
                     todoList={this.props.todoList}
+                    listItems={this.state.listToEdit.items}
                     loadListItem={this.props.loadListItem}
                     goListItem={this.props.goListItem}
                     moveItemUp={this.moveItemUp}
                     moveItemDown={this.moveItemDown}
-                    deleteItem={this.deleteItem} />
+                    deleteItem={this.deleteItem}
+                    updateJsTPS={this.props.updateJsTPS} />
             </div>
         )
     }

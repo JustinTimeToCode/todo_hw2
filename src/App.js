@@ -28,6 +28,27 @@ class App extends Component {
 
   }
 
+    handleUndo = () =>{
+        let jsTPS = this.state.jsTPS;
+        jsTPS.undoTransaction();
+        this.setState({jsTPS});
+        console.log(jsTPS);
+        console.log(jsTPS.toString());
+    }
+
+    handleRedo = () =>{
+        let jsTPS = this.state.jsTPS;
+        jsTPS.doTransaction();
+        this.setState({jsTPS});
+        console.log(jsTPS);
+        console.log(jsTPS.toString());
+    }
+
+    updateJsTPS = (transaction) =>{
+        let jsTPS = this.state.jsTPS;
+        jsTPS.addTransaction(transaction);
+        this.setState({jsTPS});
+    }
   goHome = () => {
     this.setState({currentScreen: AppScreen.HOME_SCREEN});
     this.setState({currentList: null});
@@ -84,13 +105,14 @@ class App extends Component {
   }
 
   loadNewList = () => {
-    this.setState({currentScreen: AppScreen.LIST_SCREEN});
+    
     this.setState({currentList: {
-      key: this.state.todoLists.length,
+      key: Math.floor(Math.random()*99999999) + this.state.todoLists.length,
       name: "New List",
       owner: "Some Person",
       items: []
     }}, () => this.state.todoLists.push(this.state.currentList));
+    this.goList();
     console.log(this.state.todoLists);
     console.log("currentList: " + this.state.currentList);
     console.log("currentScreen: " + this.state.currentScreen);
@@ -113,7 +135,9 @@ class App extends Component {
           goListItem={this.goListItem}
           todoList={this.state.currentList}
           removeList={this.removeList}
-          jsTPS={this.state.jsTPS}/>;
+          updateJsTPS={this.updateJsTPS}
+          handleUndo={this.handleUndo}
+          handleRedo={this.handleRedo}/>;
       case AppScreen.ITEM_SCREEN:
         return <ItemScreen 
           todoList={this.state.currentList}
@@ -121,7 +145,7 @@ class App extends Component {
           currentScreen={this.state.currentScreen}
           goList={this.goList}
           loadList={this.loadList}
-          jsTPS={this.state.jsTPS}/>;
+          updateJsTPS={this.updateJsTPS}/>;
       default:
         return <div>ERROR</div>;
     }

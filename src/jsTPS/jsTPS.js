@@ -45,7 +45,7 @@ export default class jsTPS{
      * of the stack, it will have been completed, and the counter have
      * been moved accordingly.
      * 
-     * @param transaction The custom transaction to be added to
+     * @param {jsTPS_Transaction} transaction The custom transaction to be added to
      * the transaction processing system stack and executed.
      */
     addTransaction(transaction){
