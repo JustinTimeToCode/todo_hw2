@@ -52,9 +52,9 @@ export default class jsTPS{
         // ARE THERE OLD UNDONE TRANSACTIONS ON THE STACK THAT FIRST
         // NEED TO BE CLEARED OUT, i.e. ARE WE BRANCHING?
         if ((this.mostRecentTransaction < 0)|| (this.mostRecentTransaction < (this.transactions.length - 1))) {
-            // for (var i = transactions.length - 1; i > mostRecentTransaction; i--) {
-                this.transactions.pop();
-            // }
+            for (var i = this.transactions.length - 1; i > this.mostRecentTransaction; i--) {
+                this.transactions.splice(i, 1);
+            }
         }
 
         // AND NOW ADD THE TRANSACTION

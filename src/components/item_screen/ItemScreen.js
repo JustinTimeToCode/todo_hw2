@@ -8,8 +8,7 @@ export class ItemScreen extends Component {
 
         this.state = {
             listToEdit: props.todoList,
-            itemToEdit: props.todoItem,
-            jsTPS: props.jsTPS
+            itemToEdit: props.todoItem
         }
 
         this.descriptionInput = React.createRef();
@@ -61,9 +60,11 @@ export class ItemScreen extends Component {
                 assigned_to: this.assignedToInput.current.value,
                 completed: this.completedCheckbox.current.value
             })
-            this.setState({listToEdit});
+            this.setState({listToEdit}, ()=>{
+                this.props.loadList(this.state.listToEdit);
+            });
         }
-        this.props.loadList(this.state.listToEdit);
+        
     }
 
     render() {

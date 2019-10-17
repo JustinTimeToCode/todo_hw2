@@ -18,8 +18,8 @@ export class ListItemCard extends Component {
                     {this.props.listItem.completed ? 'Completed' : 'Pending'}
                 </div>
                 <div className = 'list_item_card_toolbar'>
-                    <button onClick = {(e) => this.props.moveItemUp(e, this.props.listItem)} className='list_item_card_button'>&#8679;</button>
-                    <button onClick = {(e) => this.props.moveItemDown(e, this.props.listItem)} className='list_item_card_button'>&#8681;</button>
+                    <button onClick = {(e) => this.props.moveItemUp(e, this.props.listItem)} id={`item_card_${this.props.index}_move_up`} className='list_item_card_button move_up'>&#8679;</button>
+                    <button onClick = {(e) => this.props.moveItemDown(e, this.props.listItem)} id={`item_card_${this.props.index}_move_down`} className='list_item_card_button move_down'>&#8681;</button>
                     <button onClick = {(e) => this.props.deleteItem(e, this.props.listItem)} className='list_item_card_button'>&#10005;</button>
                 </div>
             </div>
