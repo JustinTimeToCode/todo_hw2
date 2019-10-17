@@ -19,12 +19,15 @@ export default class ItemSubmit_Transaction extends jsTPS_Transaction{
     }
 
     doTransaction(){
-        let index = this.todoItems.indexOf(this.item);
+        let index = this.todoItems.indexOf(this.previousItem);
+        console.log(index);
+        console.log(this.previousItem);
+        console.log(this.item);
 
         //Not in the array (new item)
-        if(index === -1 ){
+        if(this.type === 'NEW_ITEM'){
             this.todoItems.push(this.item);
-        } else {
+        } else if(this.type === 'EDIT_ITEM') {
             this.todoItems[index] = this.item;
         }
     }
@@ -32,14 +35,10 @@ export default class ItemSubmit_Transaction extends jsTPS_Transaction{
     undoTransaction(){
         let index = this.todoItems.indexOf(this.item);
 
-        if(this.type === 'EDIT'){
+        if(this.type === 'EDIT_ITEM'){
             this.todoItems[index] = this.previousItem;
         } else if(this.type === 'NEW_ITEM'){
             this.todoItems.splice(index, 1);
         }
-    }
-
-    undoTransaction(){
-        let index = this.
     }
 }

@@ -52,8 +52,11 @@ export class ListScreen extends Component {
         let listToEdit = todoList;
         
         if (listToEdit.name !== this.nameInput.current.value) {
-            
-            listToEdit.name = this.nameInput.current.value;
+            if (this.nameInput.current.value === '') {
+                listToEdit.name = 'Unknown List'
+            } else {
+                listToEdit.name = this.nameInput.current.value;    
+            }
             this.setState({listToEdit})
         }
         let nameChangeTransaction = new ListNameChange_Transaction(listToEdit.name, this.nameInput.current.value)

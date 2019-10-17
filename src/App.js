@@ -28,7 +28,8 @@ class App extends Component {
 
   }
 
-    handleUndo = () =>{
+    handleUndo = (e) =>{
+        e.preventDefault();
         let jsTPS = this.state.jsTPS;
         jsTPS.undoTransaction();
         this.setState({jsTPS});
@@ -36,7 +37,8 @@ class App extends Component {
         console.log(jsTPS.toString());
     }
 
-    handleRedo = () =>{
+    handleRedo = (e) =>{
+        e.preventDefault();
         let jsTPS = this.state.jsTPS;
         jsTPS.doTransaction();
         this.setState({jsTPS});

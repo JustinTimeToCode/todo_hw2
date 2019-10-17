@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
+import ItemSubmit_Transaction from '../../jsTPS/ItemSubmit_Transaction'
 
 export class ItemScreen extends Component {
 
@@ -39,27 +40,37 @@ export class ItemScreen extends Component {
         if (this.state.itemToEdit != null) {
             
             let index = this.state.listToEdit.items.indexOf(this.state.itemToEdit);
-
-            this.setState({ itemToEdit: {
+            let itemToEdit = {
                 key: this.state.itemToEdit.key,
                 description: this.descriptionInput.current.value,
                 due_date: this.dueDatePicker.current.value,
                 assigned_to: this.assignedToInput.current.value,
                 completed: this.completedCheckbox.current.checked
-            }}, () => {
-                listToEdit.items[index] = this.state.itemToEdit;
-                this.setState({listToEdit})
-                this.props.loadList(this.state.listToEdit);
-            })
+            }
+
+            // this.setState({ itemToEdit }, () => {
+            //     listToEdit.items[index] = this.state.itemToEdit;
+            //     this.setState({listToEdit})
+            //     this.props.loadList(this.state.listToEdit);
+            // });
+
+            let editItemTransaction = new ItemSubmit_Transaction(this.state.listToEdit.items, this.state.itemToEdit, itemToEdit,'EDIT_ITEM'); 
+            this.props.updateJsTPS(editItemTransaction);
+
+            this.setState({listToEdit});
+            this.props.loadList(this.state.listToEdit);
 
         } else {
-            listToEdit.items.push({
+            let newItem = {
                 key: this.state.listToEdit.length,
                 description: this.descriptionInput.current.value,
                 due_date: this.dueDatePicker.current.value,
                 assigned_to: this.assignedToInput.current.value,
                 completed: this.completedCheckbox.current.value
-            })
+            }
+            // listToEdit.items.push(newItem);
+            let newItemTransaction = new ItemSubmit_Transaction(this.state.listToEdit.items, this.state.itemToEdit, newItem, 'NEW_ITEM');
+            this.props.updateJsTPS(newItemTransaction);
             this.setState({listToEdit}, ()=>{
                 this.props.loadList(this.state.listToEdit);
             });

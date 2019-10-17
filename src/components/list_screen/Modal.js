@@ -2,14 +2,6 @@ import React, { Component } from 'react'
 
 export default class Modal extends Component{
     
-    // constructor(props) {
-    //     super(props)
-    
-    //     this.state = {
-    //         //  listToDelete: props.todoList,
-    //     }
-    // }
-    
     render(){
         return(
             <div ref={this.props.modalRef} className="modal" id="modal_yes_no_dialog" data-animation="slideInOutLeft">
