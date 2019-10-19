@@ -84,6 +84,14 @@ class App extends Component {
     this.prependList(listToMove);
   }
 
+  setListToEdit = (initListToEdit) =>{
+    this.setState({currentList: initListToEdit});
+        // if (this.state.currentList) {
+            this.moveListToTop(this.state.currentList);            
+            // this.view.loadListData(this.listToEdit);
+        // }
+  }
+
   removeList = () => {
     // REMOVE IT IF IT EXISTS
     let indexOfList = this.state.todoLists.indexOf(this.state.currentList);
@@ -97,6 +105,7 @@ class App extends Component {
   loadList = (todoListToLoad) => {
     this.setState({currentScreen: AppScreen.LIST_SCREEN});
     this.setState({currentList: todoListToLoad});
+    // this.setListToEdit(todoListToLoad)
     console.log("currentList: " + this.state.currentList);
     console.log("currentScreen: " + this.state.currentScreen);
   }

@@ -8,6 +8,7 @@ import ListNameChange_Transaction from '../../jsTPS/ListNameChange_Transaction'
 import OwnerNameChange_Transaction from '../../jsTPS/OwnerNameChange_Transaction'
 import ItemOrderChange_Transaction from '../../jsTPS/ItemOrderChange_Transaction'
 import ItemRemoval_Transaction from '../../jsTPS/ItemRemoval_Transaction'
+import ItemSort_Transaction from '../../jsTPS/ItemSort_Transaction'
 import Mousetrap from 'mousetrap'
 
 const ItemSortCriteria = {
@@ -25,7 +26,7 @@ export class ListScreen extends Component {
 
         this.state = {
             listToEdit: this.props.todoList,
-            currentItemSortCriteria: null
+            currentItemSortCriteria: ItemSortCriteria.SORT_BY_TASK_INCREASING
         }
 
         console.log(this.state);
@@ -121,6 +122,8 @@ export class ListScreen extends Component {
         // let listItems = this.state.listItems;
         // listItems.splice(index, 1);
         this.setState({listToEdit});
+
+        // this.disableButtons();
     }
 
     /**
@@ -140,6 +143,15 @@ export class ListScreen extends Component {
     }
 
     disableButtons = () =>{
+        let buttons = document.getElementsByClassName('list_item_card_button');
+        console.log(buttons)
+        Array.from(buttons).forEach((button)=>{
+            console.log(button);
+            button.setAttribute('disabled', false);
+            if(button.classList.contains('disabled')){
+                button.classlist.remove('disabled');
+            }
+        });
         this.disableButton(0, 'move_up');
         this.disableButton(this.state.listToEdit.items.length - 1, 'move_down');
     }
@@ -172,7 +184,7 @@ export class ListScreen extends Component {
      * 
      * @param {ItemSortCriteria} sortingCriteria Sorting criteria to use.
      */
-    sortTasks(sortingCriteria) {
+    sortTasks = (sortingCriteria) => {
         this.setState({currentItemSortCriteria: sortingCriteria});
         let listToEdit = this.state.listToEdit;
         listToEdit.items.sort(this.compare);
@@ -243,13 +255,26 @@ export class ListScreen extends Component {
 
     processSortItemsByTask() {
         // IF WE ARE CURRENTLY INCREASING BY TASK SWITCH TO DECREASING
+        console.log(this.state.currentItemSortCriteria);
+        let sortTransaction;
         if (this.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_TASK_INCREASING)) {
-            this.sortTasks(ItemSortCriteria.SORT_BY_TASK_DECREASING);
+            // this.sortTasks(ItemSortCriteria.SORT_BY_TASK_DECREASING);
+            sortTransaction = new ItemSort_Transaction(this.sortTasks, 
+                this.state.currentItemSortCriteria,
+                 ItemSortCriteria.SORT_BY_TASK_DECREASING);
+            this.props.updateJsTPS(sortTransaction);    
+            
         }
         // ALL OTHER CASES SORT BY INCREASING
         else {
-            this.sortTasks(ItemSortCriteria.SORT_BY_TASK_INCREASING);
+            // this.sortTasks(ItemSortCriteria.SORT_BY_TASK_INCREASING);
+            sortTransaction = new ItemSort_Transaction(this.sortTasks, 
+                this.state.currentItemSortCriteria,
+                 ItemSortCriteria.SORT_BY_TASK_INCREASING);
+            this.props.updateJsTPS(sortTransaction);     
         }
+        this.setState({listToEdit: this.state.listToEdit});
+        console.log(this.state.currentItemSortCriteria);
     }
 
     /**
@@ -258,13 +283,25 @@ export class ListScreen extends Component {
      */
     processSortItemsByDueDate() {
         // IF WE ARE CURRENTLY INCREASING BY DUE DATE SWITCH TO DECREASING
+        console.log(this.state.currentItemSortCriteria);
+        let sortTransaction;
         if (this.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_DUE_DATE_INCREASING)) {
-            this.sortTasks(ItemSortCriteria.SORT_BY_DUE_DATE_DECREASING);
+            // this.sortTasks(ItemSortCriteria.SORT_BY_DUE_DATE_DECREASING);
+            sortTransaction = new ItemSort_Transaction(this.sortTasks, 
+                this.state.currentItemSortCriteria,
+                 ItemSortCriteria.SORT_BY_DUE_DATE_DECREASING);
+            this.props.updateJsTPS(sortTransaction);     
         }
         // ALL OTHER CASES SORT BY INCREASING
         else {
-            this.sortTasks(ItemSortCriteria.SORT_BY_DUE_DATE_INCREASING);
+            // this.sortTasks(ItemSortCriteria.SORT_BY_DUE_DATE_INCREASING);
+            sortTransaction = new ItemSort_Transaction(this.sortTasks, 
+                this.state.currentItemSortCriteria,
+                 ItemSortCriteria.SORT_BY_DUE_DATE_INCREASING);
+            this.props.updateJsTPS(sortTransaction);     
         }
+        this.setState({listToEdit: this.state.listToEdit});
+        console.log(this.state.currentItemSortCriteria);
     }
 
     /**
@@ -273,13 +310,25 @@ export class ListScreen extends Component {
      */
     processSortItemsByStatus() {
         // IF WE ARE CURRENTLY INCREASING BY STATUS SWITCH TO DECREASING
+        console.log(this.state.currentItemSortCriteria);
+        let sortTransaction;
         if (this.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_STATUS_INCREASING)) {
-            this.sortTasks(ItemSortCriteria.SORT_BY_STATUS_DECREASING);
+            // this.sortTasks(ItemSortCriteria.SORT_BY_STATUS_DECREASING);
+            sortTransaction = new ItemSort_Transaction(this.sortTasks, 
+                this.state.currentItemSortCriteria,
+                 ItemSortCriteria.SORT_BY_STATUS_DECREASING);
+            this.props.updateJsTPS(sortTransaction);     
         }
         // ALL OTHER CASES SORT BY INCREASING
         else {
-            this.sortTasks(ItemSortCriteria.SORT_BY_STATUS_INCREASING);
+            // this.sortTasks(ItemSortCriteria.SORT_BY_STATUS_INCREASING);
+            sortTransaction = new ItemSort_Transaction(this.sortTasks.bind(this), 
+                this.state.currentItemSortCriteria,
+                 ItemSortCriteria.SORT_BY_STATUS_INCREASING);
+            this.props.updateJsTPS(sortTransaction);     
         }
+        this.setState({listToEdit: this.state.listToEdit});
+        console.log(this.state.currentItemSortCriteria);
     }
     
     render() {
@@ -325,7 +374,8 @@ export class ListScreen extends Component {
                     updateJsTPS={this.props.updateJsTPS}
                     processSortItemsByDueDate={this.processSortItemsByDueDate.bind(this)}
                     processSortItemsByStatus={this.processSortItemsByStatus.bind(this)}
-                    processSortItemsByTask={this.processSortItemsByTask.bind(this)} />
+                    processSortItemsByTask={this.processSortItemsByTask.bind(this)}
+                    disableButtons={this.disableButtons} />
             </div>
         )
     }

@@ -10,15 +10,15 @@ export class ListItemsTable extends Component {
         super(props);
 
         this.state = {
-            listItems: props.todoList.items, //TodoList Object Items
-            
+            listItems: props.todoList.items, //TodoList Object Items            
         }
 
         
     }
 
-
-
+    componentDidMount(){
+        // this.props.disableButtons();
+    }
 
     render() {
         return (
